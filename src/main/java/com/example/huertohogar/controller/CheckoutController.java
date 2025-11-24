@@ -5,7 +5,6 @@ import com.example.huertohogar.model.Boleta;
 import com.example.huertohogar.service.CheckoutService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.Map;
 
 import java.util.List;
 
@@ -21,21 +20,8 @@ public class CheckoutController {
     }
 
     @PostMapping
-    public ResponseEntity<?> crear(@RequestBody PedidoRequest req) {
-        try {
-            Boleta boleta = service.crearBoleta(req);
-            return ResponseEntity.ok(boleta);
-        } catch (IllegalArgumentException e) {
-            // 400 Bad Request con JSON de error
-            return ResponseEntity.badRequest().body(
-                Map.of("error", e.getMessage())
-            );
-        } catch (Exception e) {
-            // 500 Internal Server Error con JSON de error
-            return ResponseEntity.status(500).body(
-                Map.of("error", "Error interno del servidor")
-            );
-        }
+    public ResponseEntity<Boleta> crear(@RequestBody PedidoRequest req) {
+        return ResponseEntity.ok(service.crearBoleta(req));
     }
 
     @GetMapping
@@ -44,13 +30,9 @@ public class CheckoutController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> obtenerPorId(@PathVariable Long id) {
+    public ResponseEntity<Boleta> obtenerPorId(@PathVariable Long id) {
         Boleta b = service.obtenerPorId(id);
-        if (b == null) {
-            return ResponseEntity.status(404).body(Map.of("error", "Boleta no encontrada"));
-        }
+        if (b == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(b);
     }
 }
-
-

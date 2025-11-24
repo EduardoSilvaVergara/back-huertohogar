@@ -22,6 +22,7 @@ public class CheckoutService {
         this.boletaRepo = boletaRepo;
     }
 
+    // Crear boleta solo en POST
     public Boleta crearBoleta(PedidoRequest req) {
         if (req == null) throw new IllegalArgumentException("Payload nulo");
         List<PedidoRequest.Item> reqItems = req.getItems();
@@ -45,6 +46,7 @@ public class CheckoutService {
         boleta.setNeto(neto);
         boleta.setIva(iva);
 
+        // Crear items
         var items = reqItems.stream().map(i -> {
             BoletaItem bi = new BoletaItem();
             bi.setProductoId(i.getProductoId());
@@ -54,16 +56,17 @@ public class CheckoutService {
             bi.setTotalLinea(bi.getPrecioUnitario().multiply(BigDecimal.valueOf(bi.getCantidad())));
             bi.setCategoria(n(i.getCategoria()));
             bi.setImagen(n(i.getImagen()));
-            bi.setBoleta(boleta);
+            bi.setBoleta(boleta); // importante para relación bidireccional
             return bi;
         }).collect(Collectors.toList());
 
         boleta.setItems(items);
 
+        // Solo aquí se guarda la boleta
         return boletaRepo.save(boleta);
     }
 
-
+    // Solo GET -> NO CREATE
     public List<Boleta> obtenerTodas() {
         return boletaRepo.findAll();
     }
@@ -72,6 +75,6 @@ public class CheckoutService {
         return boletaRepo.findById(id).orElse(null);
     }
 
-    // Helper interno
     private String n(String s) { return s == null ? "" : s.trim(); }
 }
+
