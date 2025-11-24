@@ -6,12 +6,17 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Table(name = "boleta")
-@Data @NoArgsConstructor @AllArgsConstructor
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Boleta {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(name = "fecha_emision", columnDefinition = "DATETIME(0)")
     private LocalDateTime fechaEmision = LocalDateTime.now();
@@ -33,5 +38,6 @@ public class Boleta {
     private BigDecimal total;
 
     @OneToMany(mappedBy = "boleta", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<BoletaItem> items;
 }

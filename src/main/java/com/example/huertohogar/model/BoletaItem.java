@@ -4,11 +4,16 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.math.BigDecimal;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name = "boleta_item")
-@Data @NoArgsConstructor @AllArgsConstructor
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class BoletaItem {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private Long productoId;
@@ -26,5 +31,6 @@ public class BoletaItem {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "boleta_id")
+    @JsonBackReference
     private Boleta boleta;
 }
