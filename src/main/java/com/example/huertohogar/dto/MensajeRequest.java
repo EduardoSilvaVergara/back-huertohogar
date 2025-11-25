@@ -1,4 +1,3 @@
-// backend/src/main/java/com/example/huertohogar/dto/MensajeRequest.java
 package com.example.huertohogar.dto;
 
 import lombok.Data;

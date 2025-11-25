@@ -29,7 +29,6 @@ public class UsuarioService {
     }
     
     public Usuario guardar(Usuario usuario) {
-        // Aquí hashea contraseña si usas BCrypt
         return usuarioRepository.save(usuario);
     }
     
